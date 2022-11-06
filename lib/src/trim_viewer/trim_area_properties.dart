@@ -103,7 +103,7 @@ class TrimAreaProperties {
   /// to be applied to each corner of the trimmer area Container.
   /// By default it is set to `4.0`.
   ///
-  const TrimAreaProperties({
+const TrimAreaProperties({
     this.thumbnailFit = BoxFit.fitHeight,
     this.thumbnailQuality = 75,
     this.blurEdges = false,
@@ -136,10 +136,17 @@ class TrimAreaProperties {
   /// By default it is set to `4.0`.
   ///
   factory TrimAreaProperties.fixed({
-    BoxFit thumbnailFit,
-    int thumbnailQuality,
-    double borderRadius,
-  }) = FixedTrimAreaProperties;
+    BoxFit thumbnailFit = BoxFit.fitHeight,
+    int thumbnailQuality = 75,
+    double borderRadius = 4.0,
+  }) {
+    return FixedTrimAreaProperties(
+      thumbnailFit: thumbnailFit,
+      thumbnailQuality: thumbnailQuality,
+      borderRadius: borderRadius,
+    );
+  }
+  
 
   /// Helps defining the Trim Area properties with blur & arrows on the edges.
   ///
@@ -148,14 +155,21 @@ class TrimAreaProperties {
   /// ![](https://raw.githubusercontent.com/sbis04/video_trimmer/new_editor/screenshots/trim_viewer_preview_small.png)
   ///
   factory TrimAreaProperties.edgeBlur({
-    BoxFit thumbnailFit,
-    int thumbnailQuality,
-    bool blurEdges,
-    Color blurColor,
+    BoxFit thumbnailFit = BoxFit.fitHeight,
+    int thumbnailQuality = 75,
+    bool blurEdges = false,
+    Color blurColor = Colors.black,
     Widget? startIcon,
     Widget? endIcon,
-    double borderRadius,
-  }) = _TrimAreaPropertiesWithBlur;
+    double borderRadius = 4.0,
+  }) {
+    return _TrimAreaPropertiesWithBlur(
+      thumbnailFit: thumbnailFit,
+      thumbnailQuality: thumbnailQuality,
+      blurColor: blurColor,
+      borderRadius: borderRadius,
+    );
+  }
 }
 
 class FixedTrimAreaProperties extends TrimAreaProperties {
@@ -182,23 +196,28 @@ class FixedTrimAreaProperties extends TrimAreaProperties {
   /// By default it is set to `4.0`.
   ///
   const FixedTrimAreaProperties({
-    super.thumbnailFit,
-    super.thumbnailQuality,
-    super.borderRadius,
-  });
+    BoxFit thumbnailFit = BoxFit.fitHeight,
+    int thumbnailQuality = 75,
+    double borderRadius = 4.0,
+  }): super(
+    thumbnailFit: thumbnailFit,
+    thumbnailQuality: thumbnailQuality,
+    borderRadius: borderRadius
+  );
 }
 
 class _TrimAreaPropertiesWithBlur extends TrimAreaProperties {
   _TrimAreaPropertiesWithBlur({
-    super.thumbnailFit,
-    super.thumbnailQuality,
-    blurEdges,
-    super.blurColor,
-    super.borderRadius,
-    endIcon,
-    startIcon,
+    BoxFit thumbnailFit = BoxFit.fitHeight,
+    int thumbnailQuality = 75,
+    Color blurColor = Colors.black,
+    double borderRadius = 4.0,
   }) : super(
+          thumbnailFit: thumbnailFit,
+          thumbnailQuality: thumbnailQuality,
+          borderRadius: borderRadius,
           blurEdges: true,
+          blurColor: blurColor,
           startIcon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Colors.white,

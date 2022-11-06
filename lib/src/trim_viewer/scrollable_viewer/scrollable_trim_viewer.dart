@@ -119,7 +119,7 @@ class ScrollableTrimViewer extends StatefulWidget {
   /// * [areaProperties] defines properties for customizing the trim area.
   ///
   const ScrollableTrimViewer({
-    super.key,
+    Key? key,
     required this.trimmer,
     required this.maxVideoLength,
     required this.onThumbnailLoadingComplete,
@@ -134,7 +134,7 @@ class ScrollableTrimViewer extends StatefulWidget {
     this.paddingFraction = 0.2,
     this.editorProperties = const TrimEditorProperties(),
     this.areaProperties = const TrimAreaProperties(),
-  });
+  }): super(key: key);
 
   @override
   State<ScrollableTrimViewer> createState() => _ScrollableTrimViewerState();
@@ -189,7 +189,7 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
 
   /// Keep track of the drag type, e.g. whether the user drags the left, center or
   /// right part of the frame. Set this in [_onDragStart] when the dragging starts.
-  EditorDragType _dragType = EditorDragType.left;
+  EditorDragType _dragType = EditorDragType.start;
 
   /// Whether the dragging is allowed. Dragging is ignore if the user's gesture is outside
   /// of the frame, to make the UI more realistic.
@@ -287,7 +287,7 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
     _endCircleSize = widget.editorProperties.circleSize;
     _borderRadius = widget.editorProperties.borderRadius;
     _thumbnailViewerH = widget.viewerHeight;
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
       final renderBox =
           _trimmerAreaKey.currentContext?.findRenderObject() as RenderBox?;
       final trimmerActualWidth = renderBox?.size.width;
@@ -454,12 +454,12 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
     // Now we determine which part is dragged
     if (details.localPosition.dx <=
         _startPos.dx + widget.editorProperties.sideTapSize) {
-      _dragType = EditorDragType.left;
+      _dragType = EditorDragType.start;
     } else if (details.localPosition.dx <=
         _endPos.dx - widget.editorProperties.sideTapSize) {
       _dragType = EditorDragType.center;
     } else {
-      _dragType = EditorDragType.right;
+      _dragType = EditorDragType.end;
     }
   }
 
@@ -472,7 +472,7 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
     // log('Local pos: ${details.localPosition}');
     _localPosition = details.localPosition.dx;
 
-    if (_dragType == EditorDragType.left) {
+    if (_dragType == EditorDragType.start) {
       _startCircleSize = widget.editorProperties.circleSizeOnDrag;
       if ((_startPos.dx + details.delta.dx >= 0) &&
           (_startPos.dx + details.delta.dx <= _endPos.dx) &&
@@ -549,7 +549,7 @@ class _ScrollableTrimViewerState extends State<ScrollableTrimViewer>
     setState(() {
       _startCircleSize = widget.editorProperties.circleSize;
       _endCircleSize = widget.editorProperties.circleSize;
-      if (_dragType == EditorDragType.right) {
+      if (_dragType == EditorDragType.end) {
         videoPlayerController
             .seekTo(Duration(milliseconds: _videoEndPos.toInt()));
       } else {

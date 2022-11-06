@@ -144,13 +144,13 @@ class TrimEditorPainter extends CustomPainter {
     );
 
     if (showScrubber) {
-      if (scrubberAnimationDx.toInt() > startPos.dx.toInt()) {
+      // if (scrubberAnimationDx.toInt() > startPos.dx.toInt()) {
         canvas.drawLine(
-          Offset(scrubberAnimationDx, 0),
-          Offset(scrubberAnimationDx, 0) + Offset(0, endPos.dy),
+          Offset(scrubberAnimationDx, 1),
+          Offset(scrubberAnimationDx, 0) + Offset(0, endPos.dy - 1),
           scrubberPaint,
         );
-      }
+      // }
     }
 
     canvas.drawRRect(roundedRect, borderPaint);
